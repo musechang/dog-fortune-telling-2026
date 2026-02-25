@@ -407,13 +407,7 @@
     border-radius: 2px;
     margin-bottom: 0.7rem;
     border: 1px solid rgba(247,197,213,0.4);
-  }
-
-  .btn-row {
-    display: flex; gap: 0.7rem; margin-top: 1rem;
-    flex-wrap: wrap; justify-content: center;
-  }
-  .btn-again, .btn-download {
+  }  .btn-again {
     background: rgba(255,255,255,0.1);
     color: #f7c5d5;
     border: 1.5px solid rgba(247,197,213,0.6);
@@ -524,10 +518,7 @@
       <!-- footer -->
       <div class="slip-footer-bar">平安吉祥 · 諸事順遂</div>
     </div>
-    <div class="btn-row">
-      <button class="btn-again" onclick="resetToShake()">再抽一次</button>
-      <button class="btn-download" onclick="downloadSlip()">下載詩籤</button>
-    </div>
+    <button class="btn-again" onclick="resetToShake()">再抽一次</button>
   </div>
 </div>
 
@@ -677,32 +668,19 @@ function showResult() {
   document.getElementById('fortuneReading').textContent = f.reading;
   document.getElementById('fortuneReminder').textContent = f.reminder;
 
-  const slip = document.getElementById('fortuneSlip');
+  var slip = document.getElementById('fortuneSlip');
   slip.style.animation = 'none';
   slip.offsetHeight;
   slip.style.animation = '';
+  // Set button margin = half the button height
+  setTimeout(function() {
+    var btn = document.querySelector('.btn-again');
+    var btnH = btn.offsetHeight;
+    btn.style.marginTop = (btnH * 0.5) + 'px';
+  }, 50);
 }
 
-async function downloadSlip() {
-  const slip = document.getElementById('fortuneSlip');
-  // Use html2canvas via CDN
-  if (typeof html2canvas === 'undefined') {
-    const script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
-    document.head.appendChild(script);
-    await new Promise(r => script.onload = r);
-  }
-  const canvas = await html2canvas(slip, {
-    scale: 3,
-    backgroundColor: null,
-    useCORS: true,
-    logging: false
-  });
-  const link = document.createElement('a');
-  link.download = '2026狗狗運勢籤.png';
-  link.href = canvas.toDataURL('image/png');
-  link.click();
-}
+
 
 function resetToHome() {
   document.getElementById('result').classList.add('hidden');
