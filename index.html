@@ -240,203 +240,195 @@
 
   /* ===== RESULT SCREEN ===== */
   #result {
-    background: #f5ede0;
+    background: #5c3a1e;
+    background-image:
+      repeating-linear-gradient(90deg, transparent, transparent 18px, rgba(0,0,0,0.04) 18px, rgba(0,0,0,0.04) 19px),
+      repeating-linear-gradient(0deg, transparent, transparent 18px, rgba(0,0,0,0.04) 18px, rgba(0,0,0,0.04) 19px),
+      linear-gradient(160deg, #6b4423 0%, #4a2c10 40%, #5c3a1e 70%, #3d2008 100%);
     overflow-y: auto;
   }
   .result-wrapper {
-    max-width: 400px; width: 92vw;
-    padding: 1.5rem 0;
+    max-width: 320px; width: 85vw;
+    padding: 1.5rem 0 2rem;
     display: flex; flex-direction: column;
     align-items: center;
     min-height: 100vh; justify-content: center;
   }
 
-  /* Taiwan temple fortune slip style */
+  /* ── Slip outer container (simulates a thin physical card) ── */
   .fortune-slip {
     width: 100%;
-    background: #f9f0dc;
-    border: 3px double #8b1a1a;
-    border-radius: 16px;
     position: relative;
-    box-shadow: 0 6px 30px rgba(61,26,6,0.25), inset 0 0 60px rgba(139,90,40,0.08);
+    /* outer border like the reference photo */
+    border: 2px solid #2a1a08;
+    border-radius: 3px;
+    box-shadow: 3px 3px 0 #2a1a08, 6px 6px 12px rgba(0,0,0,0.5);
     overflow: hidden;
+    animation: slipDrop 0.5s cubic-bezier(0.34,1.3,0.64,1) forwards;
+    background: #f7c5d5;
   }
-  /* Paper texture overlay */
+  @keyframes slipDrop {
+    0% { opacity:0; transform: translateY(-20px) scale(0.96); }
+    100% { opacity:1; transform: translateY(0) scale(1); }
+  }
+
+  /* paper texture overlay */
   .fortune-slip::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image:
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.06'/%3E%3C/svg%3E");
-    border-radius: 16px;
-    pointer-events: none;
-    z-index: 1;
+    content:'';
+    position:absolute; inset:0; z-index:3; pointer-events:none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
   }
-  /* Subtle fiber lines for paper feel */
-  .fortune-slip::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: repeating-linear-gradient(
-      180deg,
-      transparent,
-      transparent 3px,
-      rgba(180,140,80,0.04) 3px,
-      rgba(180,140,80,0.04) 4px
-    );
-    border-radius: 16px;
-    pointer-events: none;
-    z-index: 1;
-  }
-  .fortune-slip > * { position: relative; z-index: 2; }
-  /* Red top band */
-  .slip-top-band {
-    background: var(--deep-red);
-    padding: 0.6rem 1rem;
-    text-align: center;
-    border-bottom: 3px double #e8c56d;
-    border-radius: 13px 13px 0 0;
-  }
-  .slip-top-band-text {
-    color: var(--gold);
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.4em;
-  }
-  /* Temple name */
-  .slip-temple {
-    text-align: center;
-    font-size: 0.75rem;
-    color: #8b1a1a;
-    letter-spacing: 0.4em;
-    padding: 0.4rem;
-    border-bottom: 1px solid rgba(139,26,26,0.2);
-    font-weight: 700;
-  }
-  /* Slip number row */
-  .slip-number-row {
+  .fortune-slip > * { position: relative; z-index: 4; }
+
+  /* ── TOP TITLE BAR: "第X籤 上上吉" ── */
+  .slip-title-bar {
+    background: #f2a8bf;
+    border-bottom: 1.5px solid #2a1a08;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 0.5rem 1rem;
-    border-bottom: 1px solid rgba(139,26,26,0.15);
+    justify-content: center;
+    padding: 0.4rem 0.6rem 0.3rem;
+    gap: 0.5rem;
   }
-  .slip-number {
-    font-size: 1.8rem;
-    font-weight: 900;
-    color: var(--deep-red);
-    letter-spacing: 0.1em;
+  .slip-title-num {
+    font-size: 1.5rem; font-weight: 900;
+    color: #1a0a00; letter-spacing: 0.05em;
+    line-height: 1;
   }
-  .slip-grade {
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: #8b1a1a;
-    text-align: right;
-    line-height: 1.4;
+  .slip-title-divider {
+    width: 1.5px; height: 28px;
+    background: #2a1a08; opacity: 0.4;
   }
-  /* Poem section — vertical layout like real slips */
-  .slip-poem-section {
-    padding: 0.8rem 1rem;
-    border-bottom: 2px solid rgba(139,26,26,0.2);
-    background: rgba(139,26,26,0.03);
+  .slip-title-grade {
+    font-size: 0.82rem; font-weight: 900;
+    color: #1a0a00; letter-spacing: 0.15em;
+    line-height: 1.5; text-align: center;
   }
-  .slip-section-label {
-    font-size: 0.7rem;
-    color: #a0522d;
-    letter-spacing: 0.4em;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
+
+  /* ── INNER BORDER LINE (double border effect) ── */
+  .slip-inner-border {
+    margin: 3px;
+    border: 1px solid rgba(42,26,8,0.25);
+    border-radius: 1px;
+  }
+
+  /* ── MAIN BODY: right-side annotation column + poem columns ── */
+  .slip-main-body {
     display: flex;
-    align-items: center;
-    gap: 0.4rem;
+    flex-direction: row;
+    background: #f7c5d5;
+    min-height: 200px;
   }
-  .slip-section-label::before, .slip-section-label::after {
-    content: '';
+
+  /* right annotation strip (like original's right side thin text) */
+  .slip-right-strip {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    background: #f2a8bf;
+    border-left: 1.5px solid rgba(42,26,8,0.3);
+    padding: 0.5rem 0.25rem;
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: #2a1a08;
+    letter-spacing: 0.2em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    min-width: 22px;
+  }
+  .slip-right-strip span {
+    display: block;
+    color: rgba(42,26,8,0.6);
+    font-size: 0.55rem;
+  }
+
+  /* poem columns area */
+  .slip-poem-area {
     flex: 1;
-    height: 1px;
-    background: rgba(139,26,26,0.25);
+    display: flex;
+    flex-direction: row-reverse; /* right to left */
+    padding: 0.6rem 0.4rem 0.6rem 0.4rem;
+    gap: 0;
+    justify-content: center;
+    border-bottom: 1.5px solid rgba(42,26,8,0.2);
   }
-  .slip-poem {
-    font-size: 1rem;
-    line-height: 2.2;
+  .slip-poem-col {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-size: 1.1rem;
+    font-weight: 700;
     color: #1a0a00;
-    font-weight: 700;
+    line-height: 1.5;
+    letter-spacing: 0.2em;
+    padding: 0 0.45rem;
+    border-right: 1px solid rgba(42,26,8,0.12);
     text-align: center;
-    white-space: pre-line;
   }
-  /* Horizontal rule in red ink style */
-  .slip-divider {
-    height: 1px;
-    background: repeating-linear-gradient(to right, #8b1a1a 0, #8b1a1a 4px, transparent 4px, transparent 8px);
-    margin: 0;
-    opacity: 0.3;
+  .slip-poem-col:last-child { border-right: none; }
+
+  /* ── BOTTOM SECTION: reading + reminder ── */
+  .slip-bottom-section {
+    background: #f7c5d5;
+    border-top: 1.5px solid rgba(42,26,8,0.2);
   }
-  /* Reading / reminder sections */
-  .slip-reading-section {
-    padding: 0.7rem 1rem;
-    border-bottom: 1px solid rgba(139,26,26,0.15);
+  .slip-bottom-row {
+    padding: 0.45rem 0.65rem;
+    border-bottom: 1px solid rgba(42,26,8,0.12);
   }
-  .slip-reading-text {
-    font-size: 0.9rem;
-    line-height: 1.9;
-    color: #3d1a06;
+  .slip-bottom-row:last-child { border-bottom: none; }
+  .slip-bottom-label {
+    font-size: 0.6rem; font-weight: 900;
+    color: #8b1a3a; letter-spacing: 0.4em;
+    margin-bottom: 0.2rem;
   }
-  .slip-reminder-section {
-    padding: 0.6rem 1rem;
-    background: rgba(232,197,109,0.12);
+  .slip-bottom-text {
+    font-size: 0.78rem; line-height: 1.85;
+    color: #1a0a00;
   }
-  .slip-reminder-text {
-    font-size: 0.85rem;
-    line-height: 1.8;
-    color: #6b2d0e;
-    font-weight: 700;
-  }
-  /* Bottom band */
-  .slip-bottom-band {
-    background: var(--deep-red);
-    padding: 0.4rem;
+
+  /* ── FOOTER ── */
+  .slip-footer-bar {
+    background: #f2a8bf;
+    border-top: 1.5px solid #2a1a08;
+    padding: 0.2rem;
     text-align: center;
-    border-top: 2px double #e8c56d;
-    border-radius: 0 0 13px 13px;
-  }
-  .slip-bottom-ornament {
-    color: var(--gold);
-    font-size: 0.85rem;
-    letter-spacing: 0.5em;
+    font-size: 0.58rem; font-weight: 700;
+    color: rgba(42,26,8,0.65); letter-spacing: 0.5em;
   }
 
   /* Year badge */
   .year-badge {
-    background: var(--gold);
-    color: var(--deep-red);
-    font-size: 0.85rem;
-    font-weight: 900;
+    background: rgba(255,255,255,0.12);
+    color: #f7c5d5;
+    font-size: 0.72rem; font-weight: 700;
     letter-spacing: 0.3em;
-    padding: 0.25rem 1.2rem;
+    padding: 0.2rem 1rem;
     border-radius: 2px;
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.7rem;
+    border: 1px solid rgba(247,197,213,0.4);
   }
-  .btn-again {
-    margin-top: 1.2rem;
-    background: linear-gradient(135deg, var(--deep-red), var(--red));
-    color: var(--gold);
-    border: 1px solid var(--gold);
-    padding: 0.75rem 2.2rem;
+
+  .btn-row {
+    display: flex; gap: 0.7rem; margin-top: 1rem;
+    flex-wrap: wrap; justify-content: center;
+  }
+  .btn-again, .btn-download {
+    background: rgba(255,255,255,0.1);
+    color: #f7c5d5;
+    border: 1.5px solid rgba(247,197,213,0.6);
+    padding: 0.6rem 1.4rem;
     font-family: 'Noto Serif TC', serif;
-    font-size: 1.1rem;
-    font-weight: 700;
-    letter-spacing: 0.3em;
-    border-radius: 4px;
+    font-size: 0.9rem; font-weight: 700;
+    letter-spacing: 0.2em;
+    border-radius: 2px;
     cursor: pointer;
     transition: all 0.2s;
   }
-  .btn-again:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(139,26,26,0.4); }
-
-  @keyframes scrollUnroll {
-    0% { transform: scaleY(0.2); opacity: 0; }
-    100% { transform: scaleY(1); opacity: 1; }
+  .btn-again:hover, .btn-download:hover {
+    background: rgba(247,197,213,0.25);
+    border-color: #f7c5d5;
   }
-  .fortune-slip { animation: scrollUnroll 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards; }
 </style>
 </head>
 <body>
@@ -470,8 +462,8 @@
     </div>
   </div>
 
-  <div class="home-title">汪汪抽籤</div>
-  <div class="home-subtitle">2026 狗狗運勢</div>
+  <div class="home-title">2026年狗狗運勢</div>
+  <div class="home-subtitle">汪汪抽籤</div>
 
   <div class="divider">✦ ✦ ✦</div>
   <button class="btn-draw" onclick="goToShake()">開始抽籤</button>
@@ -501,34 +493,41 @@
 <!-- RESULT -->
 <div class="screen hidden" id="result">
   <div class="result-wrapper">
-    <div class="year-badge">2026 汪年運勢籤</div>
+    <div class="year-badge">汪汪廟 · 二〇二六年</div>
     <div class="fortune-slip" id="fortuneSlip">
-      <div class="slip-top-band">
-        <div class="slip-top-band-text">汪汪廟 求籤 謹奉</div>
+      <!-- title bar -->
+      <div class="slip-title-bar">
+        <div class="slip-title-num" id="fortuneNumber">第一籤</div>
+        <div class="slip-title-divider"></div>
+        <div class="slip-title-grade" id="fortuneGradeMain">上上吉<br><span style="font-size:0.68rem;opacity:0.8" id="fortuneGradeSub">守護平安籤</span></div>
       </div>
-      <div class="slip-temple">天下狗狗守護廟 · 二〇二六年</div>
-      <div class="slip-number-row">
-        <div class="slip-number" id="fortuneNumber">第一籤</div>
-        <div class="slip-grade" id="fortuneGrade">上上吉<br>守護平安籤</div>
+      <!-- main body -->
+      <div class="slip-main-body">
+        <!-- poem columns, right to left -->
+        <div class="slip-poem-area" id="fortunePoemCols"></div>
+        <!-- right annotation strip -->
+        <div class="slip-right-strip">
+          天下狗狗守護廟<span>求籤謹奉</span>
+        </div>
       </div>
-      <div class="slip-poem-section">
-        <div class="slip-section-label">籤 詩</div>
-        <div class="slip-poem" id="fortunePoem"></div>
+      <!-- bottom: reading + reminder -->
+      <div class="slip-bottom-section">
+        <div class="slip-bottom-row">
+          <div class="slip-bottom-label">解 讀</div>
+          <div class="slip-bottom-text" id="fortuneReading"></div>
+        </div>
+        <div class="slip-bottom-row">
+          <div class="slip-bottom-label">提 醒</div>
+          <div class="slip-bottom-text" id="fortuneReminder"></div>
+        </div>
       </div>
-      <div class="slip-divider"></div>
-      <div class="slip-reading-section">
-        <div class="slip-section-label">解 讀</div>
-        <div class="slip-reading-text" id="fortuneReading"></div>
-      </div>
-      <div class="slip-reminder-section">
-        <div class="slip-section-label">提 醒</div>
-        <div class="slip-reminder-text" id="fortuneReminder"></div>
-      </div>
-      <div class="slip-bottom-band">
-        <div class="slip-bottom-ornament">✦ 平安吉祥 ✦</div>
-      </div>
+      <!-- footer -->
+      <div class="slip-footer-bar">平安吉祥 · 諸事順遂</div>
     </div>
-    <button class="btn-again" onclick="resetToHome()">再抽一次</button>
+    <div class="btn-row">
+      <button class="btn-again" onclick="resetToShake()">再抽一次</button>
+      <button class="btn-download" onclick="downloadSlip()">下載詩籤</button>
+    </div>
   </div>
 </div>
 
@@ -659,16 +658,50 @@ function showResult() {
   document.getElementById('shake').classList.add('hidden');
   document.getElementById('result').classList.remove('hidden');
   const f = selectedFortune;
+
   document.getElementById('fortuneNumber').textContent = f.number;
-  document.getElementById('fortuneGrade').textContent = f.grade;
-  document.getElementById('fortunePoem').textContent = f.poem;
+  const gradeParts = f.grade.split('\n');
+  document.getElementById('fortuneGradeMain').childNodes[0].textContent = gradeParts[0] || '';
+  document.getElementById('fortuneGradeSub').textContent = gradeParts[1] || '';
+
+  const poemLines = f.poem.split('\n').filter(l => l.trim());
+  const colsEl = document.getElementById('fortunePoemCols');
+  colsEl.innerHTML = '';
+  poemLines.forEach(line => {
+    const col = document.createElement('div');
+    col.className = 'slip-poem-col';
+    col.textContent = line.replace(/[，。]/g,'');
+    colsEl.appendChild(col);
+  });
+
   document.getElementById('fortuneReading').textContent = f.reading;
   document.getElementById('fortuneReminder').textContent = f.reminder;
-  // reset animation
+
   const slip = document.getElementById('fortuneSlip');
   slip.style.animation = 'none';
   slip.offsetHeight;
   slip.style.animation = '';
+}
+
+async function downloadSlip() {
+  const slip = document.getElementById('fortuneSlip');
+  // Use html2canvas via CDN
+  if (typeof html2canvas === 'undefined') {
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+    document.head.appendChild(script);
+    await new Promise(r => script.onload = r);
+  }
+  const canvas = await html2canvas(slip, {
+    scale: 3,
+    backgroundColor: null,
+    useCORS: true,
+    logging: false
+  });
+  const link = document.createElement('a');
+  link.download = '2026狗狗運勢籤.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
 }
 
 function resetToHome() {
@@ -684,6 +717,35 @@ function resetToHome() {
   document.getElementById('shakeInstruction').style.opacity = '0';
   document.getElementById('shakeInstruction').style.animation = 'blink 1.5s ease-in-out infinite';
   document.getElementById('home').classList.remove('hidden');
+}
+
+function resetToShake() {
+  document.getElementById('result').classList.add('hidden');
+  const cyl = document.getElementById('cylinder');
+  cyl.classList.remove('tilted','tilting');
+  document.getElementById('flyingSticks').innerHTML = '';
+  isShaking = false; shakeProgress = 0;
+  document.getElementById('progressBar').style.width = '0%';
+  document.getElementById('progressContainer').style.opacity = '0';
+  document.getElementById('shakeTitle').textContent = '搖出你的籤';
+  document.getElementById('shakeInstruction').style.opacity = '0';
+  document.getElementById('shakeInstruction').style.animation = 'blink 1.5s ease-in-out infinite';
+  // Rebuild sticks and go directly to shake
+  const sh = document.getElementById('shake');
+  sh.classList.remove('hidden');
+  const sticksTop = document.getElementById('sticksTop');
+  sticksTop.innerHTML = '';
+  const stickColors = ['#8b4513','#a0522d','#6b3410','#7a3a15','#5c2a08','#9a5020','#6e3212'];
+  for (let i = 0; i < 7; i++) {
+    const s = document.createElement('div');
+    s.style.cssText = `width:8px;height:${50+Math.random()*30}px;background:${stickColors[i]};border-radius:3px 3px 0 0;transform:rotate(${(Math.random()-0.5)*15}deg);`;
+    sticksTop.appendChild(s);
+  }
+  setTimeout(() => {
+    document.getElementById('shakeInstruction').style.opacity = '1';
+    document.getElementById('progressContainer').style.opacity = '1';
+  }, 300);
+  sh.addEventListener('click', handleShakeClick);
 }
 </script>
 
